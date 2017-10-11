@@ -303,7 +303,7 @@ private:
   uint32_t m_idlePktSize;   //!< Avg pkt size used during idle times
   bool m_isWait;            //!< True for waiting between dropped packets
   bool m_isGentle;          //!< True to increase dropping prob. slowly when m_qAvg exceeds m_maxTh
-  bool m_isMRED;
+  bool m_isMRED;            //!< True to enable MRED
   bool m_isARED;            //!< True to enable Adaptive RED
   bool m_isAdaptMaxP;       //!< True to adapt m_curMaxP
   double m_minTh;           //!< Minimum threshold for m_qAvg (bytes or packets)
@@ -342,7 +342,7 @@ private:
   double m_ptc;             //!< packet time constant in packets/second
   double m_qAvg;            //!< Average queue length
   uint32_t m_count;         //!< Number of packets since last random number generation
-  uint32_t nQueued;
+  uint32_t nQueued;         //!< Instantaneous Queue size
   FengStatus m_fengStatus;  //!< For use in Feng's Adaptive RED
   /**
    * 0 for default RED
