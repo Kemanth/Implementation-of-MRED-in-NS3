@@ -124,6 +124,11 @@ TypeId RedQueueDisc::GetTypeId (void)
                    BooleanValue (false),
                    MakeBooleanAccessor (&RedQueueDisc::m_isNonlinear),
                    MakeBooleanChecker ())
+    .AddAttribute ("MRED",
+                   "True to increases dropping probability slowly when average queue and instantaneous queue exceeds maxthresh",
+                   BooleanValue (true),
+                   MakeBooleanAccessor (&RedQueueDisc::m_isMRED),
+                   MakeBooleanChecker ())
     .AddAttribute ("MinTh",
                    "Minimum average length threshold in packets/bytes",
                    DoubleValue (5),
@@ -368,7 +373,7 @@ RedQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
 {
   NS_LOG_FUNCTION (this << item);
 
-  uint32_t nQueued = 0;
+  nQueued = 0;
 
   if (GetMode () == QUEUE_DISC_MODE_BYTES)
     {
@@ -760,11 +765,15 @@ RedQueueDisc::CalculatePNew (void)
       // size ranges from m_maxTh to twice m_maxTh
       p = m_vC * m_qAvg + m_vD;
     }
-  else if (!m_isGentle && m_qAvg >= m_maxTh)
+  else if (m_isMRED && m_qAvg >= m_maxTh && nQueued >= m_maxTh)
+    {
+      p = 1.0;
+    }
+  else if (!m_isGentle && !m_isMRED && m_qAvg >= m_maxTh)
     {
       /* 
-       * OLD: p continues to range linearly above m_curMaxP as
-       * the average queue size ranges above m_maxTh.
+       * OLD: p continues to range linearly above max_p as
+       * the average queue size ranges above th_max.
        * NEW: p is set to 1.0
        */
       p = 1.0;
