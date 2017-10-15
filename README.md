@@ -11,7 +11,7 @@ To simulate MRED algorithm, the attribute MRED must be set to true, as shown bel
 
 Config::SetDefault ("ns3::RedQueueDisc::MRED", BooleanValue (true));
 
-MRED Example
+## MRED Example
 
 An example program for MRED has been provided in
 
