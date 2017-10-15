@@ -7,9 +7,21 @@ Modified RED (MRED) [1] is a variant of Random Early Detection (RED) [2] in whic
 
 ## Simulating MRED
 
-To simulate NLRED algorithm, the attribute MRED must be set to true, as shown below:
+To simulate MRED algorithm, the attribute MRED must be set to true, as shown below:
 
 Config::SetDefault ("ns3::RedQueueDisc::MRED", BooleanValue (true));
+
+MRED Example
+
+An example program for MRED has been provided in
+
+src/traffic-control/examples/red-vs-mred.cc
+
+and should be executed as
+
+./waf --run "red-vs-mred --queueDiscType=MRED"
+
+./waf --run "red-vs-mred --queueDiscType=RED"
 
 ## References
 
