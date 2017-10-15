@@ -373,7 +373,7 @@ RedQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
 {
   NS_LOG_FUNCTION (this << item);
 
-  nQueued = 0;
+  uint32_t nQueued = 0;
 
   if (GetMode () == QUEUE_DISC_MODE_BYTES)
     {
@@ -696,7 +696,7 @@ RedQueueDisc::DropEarly (Ptr<QueueDiscItem> item, uint32_t qSize)
 {
   NS_LOG_FUNCTION (this << item << qSize);
 
-  double prob1 = CalculatePNew ();
+  double prob1 = CalculatePNew (qSize);
   m_vProb = ModifyP (prob1, item->GetSize ());
 
   // Drop probability is computed, pick random number and act
@@ -754,7 +754,7 @@ RedQueueDisc::DropEarly (Ptr<QueueDiscItem> item, uint32_t qSize)
 
 // Returns a probability using these function parameters for the DropEarly funtion
 double
-RedQueueDisc::CalculatePNew (void)
+RedQueueDisc::CalculatePNew (uint32_t qSize)
 {
   NS_LOG_FUNCTION (this);
   double p;
@@ -765,8 +765,10 @@ RedQueueDisc::CalculatePNew (void)
       // size ranges from m_maxTh to twice m_maxTh
       p = m_vC * m_qAvg + m_vD;
     }
-  else if (m_isMRED && m_qAvg >= m_maxTh && nQueued >= m_maxTh)
+  else if (m_isMRED && m_qAvg >= m_maxTh && qSize >= m_maxTh)
     {
+      // if MRED is enabled and qSize ranges above maxth drop the packet
+      
       p = 1.0;
     }
   else if (!m_isGentle && !m_isMRED && m_qAvg >= m_maxTh)

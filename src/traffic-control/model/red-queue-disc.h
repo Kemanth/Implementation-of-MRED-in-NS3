@@ -288,7 +288,7 @@ private:
    * \brief Returns a probability using these function parameters for the DropEarly function
    * \returns Prob. of packet drop before "count"
    */
-  double CalculatePNew (void);
+  double CalculatePNew (uint32_t qSize);
   /**
    * \brief Returns a probability using these function parameters for the DropEarly function
    * \param p Prob. of packet drop before "count"
@@ -342,7 +342,6 @@ private:
   double m_ptc;             //!< packet time constant in packets/second
   double m_qAvg;            //!< Average queue length
   uint32_t m_count;         //!< Number of packets since last random number generation
-  uint32_t nQueued;         //!< Instantaneous Queue size
   FengStatus m_fengStatus;  //!< For use in Feng's Adaptive RED
   /**
    * 0 for default RED
