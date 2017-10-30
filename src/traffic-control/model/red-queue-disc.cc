@@ -126,7 +126,7 @@ TypeId RedQueueDisc::GetTypeId (void)
                    MakeBooleanChecker ())
     .AddAttribute ("MRED",
                    "True to increases dropping probability slowly when average queue and instantaneous queue exceeds maxthresh",
-                   BooleanValue (true),
+                   BooleanValue (false),
                    MakeBooleanAccessor (&RedQueueDisc::m_isMRED),
                    MakeBooleanChecker ())
     .AddAttribute ("MinTh",
@@ -974,7 +974,10 @@ RedQueueDisc::CheckConfig (void)
     {
       NS_LOG_ERROR ("m_isAdaptMaxP and m_isFengAdaptive cannot be simultaneously true");
     }
-
+  if (m_isMRED && m_isGentle)
+    {
+      NS_LOG_ERROR ("m_isMRED and m_isgentle cannot be simultaneously true");
+    }
   return true;
 }
 
